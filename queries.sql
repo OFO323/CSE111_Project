@@ -39,19 +39,54 @@ VALUES
     (3, 'BestBuy', 1),
     (3, 'Target', 1),
     (3, 'Walmart', 1),
-    (3, 'Gamestop', 1);
+    (3, 'Gamestop', 1)
+    (6, 'Amazon', 1);
 
 INSERT INTO 
     products(
     p_storeName,
     p_prodName,
     p_price,
-    p_releasedate
+    p_releasedate,
+    p_type
     )
 VALUES
-    ('Target','The Legend of Zelda: Breadth of the Wild', 39.99, '2018-05-09'),
-    ('Walmart', 'Super Mario Odyssey', 49.9, '2018-10-20'),
-    ('Target', 'Animal Crossing: New Horizons', 59.9, '2020-05-21');
+    ('Target','The Legend of Zelda: Breath of the Wild', 39.99, '2018-05-09', 'Software'),
+    ('Walmart', 'Super Mario Odyssey', 49.9, '2018-10-20', 'Software'),
+    ('Target', 'Animal Crossing: New Horizons', 59.9, '2020-05-21', 'Software')
+    ('Target', 'Nintendo Switch with Neon Blue and Neon Red Joy-Con', 299.99, '2017-03-03', 'Hardware'),
+    ('Target', 'Nintendo Switch with Gray Joy-Con', 299.99, '2017-03-03', 'Hardware'),
+    ('Target', 'Nintendo Switch Lite - Turquoise', 199.99, '2019-09-20', 'Hardware'),
+    ('Target','Nintendo Switch Lite - Gray', 199.99, '2019-09-20', 'Hardware'),
+    ('Target', 'Nintendo Switch Lite - Yellow', 199.99, '2019-09-20', 'Hardware'),
+    ('Target', 'Nintendo Switch Lite - Coral', 199.99, '2019-09-20', 'Hardware');
+
+
+-- Hardware/software should be added dynamically when new items are added to the products table
+INSERT INTO 
+    hardware(
+    h_name,
+    h_price,
+    h_releaseDate
+    )
+VALUES
+    ('Nintendo Switch with Neon Blue and Neon Red Joy-Con', 299.99, '2017-03-03'),
+    ('Nintendo Switch with Gray Joy-Con', 299.99, '2017-03-03'),
+    ('Nintendo Switch Lite - Turquoise', 199.99, '2019-09-20'),
+    ('Nintendo Switch Lite - Gray', 199.99, '2019-09-20'),
+    ('Nintendo Switch Lite - Yellow', 199.99, '2019-09-20'),
+    ('Nintendo Switch Lite - Coral', 199.99, '2019-09-20');
+
+INSERT INTO
+    software(
+    s_prodName,
+    s_price,
+    s_releasedate
+    )
+VALUES
+    ('Animal Crossing: New Horizons', 59.9, '2020-09-28'),
+    ('Super Mario Odyssey', 49.9, '2018-10-20'),
+    ('The Legend of Zelda: Breath of the Wild', 39.99, '2018-05-09');
 
 INSERT INTO
     inStock(
@@ -62,7 +97,7 @@ INSERT INTO
     is_prodAmount
     )
 VALUES
-    ('The Legend of Zelda: Breadth of the Wild', 'Target', 1, 1, 0),
+    ('The Legend of Zelda: Breath of the Wild', 'Target', 1, 1, 0),
     ('Super Mario Odyssey', 'Walmart', 2, 1, 5),
     ('Animal Crossing: New Horizons', 'Target', 2, 2, 10);
 
@@ -76,7 +111,7 @@ INSERT INTO
     sE_estimatedArrival
     )
 VALUES
-    ('The Legend of Zelda: Breadth of the Wild', 1, 'Target', 1, '2020-09-02', '2020-09-16'),
+    ('The Legend of Zelda: Breath of the Wild', 1, 'Target', 1, '2020-09-02', '2020-09-16'),
     ('Super Mario Odyssey', 1, 'Walmart', 2, '2020-08-10', '2020-08-24'),
     ('Animal Crossing: New Horizons', 2, 'Target', 2, '2020-09-28', '2020-10-12');
 
@@ -91,6 +126,7 @@ VALUES
     (3, 'Modesto'),
     (4, 'Turlock'),
     (5, 'Madera');
+    (6, 'Internet');
 
 INSERT INTO
     supplyDemand(
@@ -99,7 +135,7 @@ INSERT INTO
     sD_storeRatingAvg
     )
 VALUES  
-    ('The Legend of Zelda: Breadth of the Wild', 10, 9.4),
+    ('The Legend of Zelda: Breath of the Wild', 10, 9.4),
     ('Super Mario Odyssey', 9.1, 9.0),
     ('Animal Crossing: New Horizons', 9.3, 8.8);
 
@@ -112,7 +148,7 @@ INSERT INTO
     pCF_percentChng
     )
 VALUES
-    ('The Legend of Zelda: Breadth of the Wild', 'Target', 39.99, 49.99, -20.01),
+    ('The Legend of Zelda: Breath of the Wild', 'Target', 39.99, 49.99, -20.01),
     ('Super Mario Odyssey', 'Walmart', 49.99, 30.00, 40.01),
     ('Animal Crossing: New Horizons', 'Target', 49.99, 60.00, -17.02);
 
@@ -132,34 +168,51 @@ FROM Store;
 
 
 -- Check if a specific store contains a specific product
-SELECT c_prodName, c_storeName
+SELECT c_storeName, c_prodName
 FROM Contains
-WHERE c_storeNum = 'Target' AND
-        c_prodName = 'The Legend of Zelda: Breath of the Wild';
+WHERE c_storeNum = 1 AND
+        c_prodName = 'The Legend of Zelda: Breath of the Wild' AND
+        c_status = 1;
+
+SELECT c_prodName, c_storeName
+
 
 SELECT p_Name
 FROM inStock;
 
 -- Check the price change frequency for a specific product
-SELECT pCF_percentChng
-FROM priceChngFreq;
-
--- Display only the cheapest prices from every store
-SELECT s_storeName, p_price
-FROM products, Store
+SELECT *
+FROM priceChngFreq
 WHERE
-    s_storeName = 'Target' AND
-    s_storeNum = ''
-GROUP BY s_storeNum
-ORDER BY p_price    -- Must order by ascending price (Cheapest at the top)
+    pCF_prodName = 'Super Mario Odyssey'
+ORDER BY pCF_percentChng ASC;
+
+-- Display only the cheapest prices from every store within a specific city
+SELECT l_cityName, s_storeName, p_prodName, MIN(p_price)
+FROM products, Store, locations
+WHERE
+    s_cityID = 1
+GROUP BY s_storeName
+ORDER BY p_price DESC   -- Must order by ascending price (Cheapest at the top)
 ;
 
+-- Display only the cheapest prices from a specific store
+SELECT l_cityName, s_storeName, s_storeNum, MIN(p_price)
+FROM products, Store, locations
+WHERE
+    s_cityID = 1 AND
+    s_storeName = 'Target'
+GROUP BY s_storeNum
+ORDER BY p_price DESC;
 
+
+/*
 -- Calculate price percentage change
 SELECT pCF_percentChng
 FROM priceChngFreq
 WHERE
     (pCF_prodStorePrice / pCF_basePrice) = pCF_percentChng;
+*/
 
 
 -- Delete query ------------------------------------
@@ -171,8 +224,20 @@ FROM storeInventory
 WHERE 
     is_prodName = '' AND
     is_storeName = '' AND
-    is_cityID = 1 -- AND
+    is_cityID = 1; -- AND
     -- is_storeNum = 1 ;    -- We may only need the product, store, and city
+
+DELETE *
+FROM Contains
+WHERE
+    c_prodName = '' AND
+    c_storeNum = '';
+
+DELETE *
+FROM hardware;
+
+DELETE *
+FROM software;
 
 
 -- Update Query -------------------------------------
@@ -236,10 +301,9 @@ WHERE
 UPDATE 
     SupplyDemand
 SET 
-    sD_nintendoRating = 8.5     -- Nintendo doesn't have official ratings; we only have store ratings to go off of
+    sD_storeRatingAvg = 8.5
 WHERE
-    sd_prodName = '';
-
+    sD_prodName = ''; --may need to added store name to relation table to carry out this operation
 
 --price anaysis (one of our use cases)
 
