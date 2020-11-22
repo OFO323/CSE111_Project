@@ -46,7 +46,7 @@ app.use(express.urlencoded({extended : false})); // can now handle encoded url d
 app.use(logger);
 
 //allows for use of router to functions in 'products' file / can now be accessed through requests on localhost:5000/api/products
-app.use('/api/products').require('./routes/api/products');
+app.use('/api/products', require('./routes/api/products'));
 
 //express listen on port and report success message 
 app.listen(PORT, () => console.log(`Server started in port: ${PORT}`));
