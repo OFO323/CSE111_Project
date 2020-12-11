@@ -42,24 +42,48 @@ VALUES
     (3, 'Gamestop', 1)
     (6, 'Amazon', 1);
 
+
+DELETE FROM products;
+
 INSERT INTO 
     products(
+    p_cityNum,
     p_storeName,
+    p_storeNum,
     p_prodName,
     p_price,
     p_releasedate,
     p_type
     )
 VALUES
-    ('Target','The Legend of Zelda: Breath of the Wild', 39.99, '2018-05-09', 'Software'),
-    ('Walmart', 'Super Mario Odyssey', 49.9, '2018-10-20', 'Software'),
-    ('Target', 'Animal Crossing: New Horizons', 59.9, '2020-05-21', 'Software')
-    ('Target', 'Nintendo Switch with Neon Blue and Neon Red Joy-Con', 299.99, '2017-03-03', 'Hardware'),
-    ('Target', 'Nintendo Switch with Gray Joy-Con', 299.99, '2017-03-03', 'Hardware'),
-    ('Target', 'Nintendo Switch Lite - Turquoise', 199.99, '2019-09-20', 'Hardware'),
-    ('Target','Nintendo Switch Lite - Gray', 199.99, '2019-09-20', 'Hardware'),
-    ('Target', 'Nintendo Switch Lite - Yellow', 199.99, '2019-09-20', 'Hardware'),
-    ('Target', 'Nintendo Switch Lite - Coral', 199.99, '2019-09-20', 'Hardware');
+    (1, 'Target', 1,'The Legend of Zelda: Breath of the Wild', 39.99, '2018-05-09', 'Software'),
+    (1, 'Walmart', 1, 'Super Mario Odyssey', 49.9, '2018-10-20', 'Software'),
+    (1, 'Target', 1, 'Animal Crossing: New Horizons', 59.9, '2020-05-21', 'Software'),
+    (1, 'Target', 1, 'Nintendo Switch with Neon Blue and Neon Red Joy-Con', 299.99, '2017-03-03', 'Hardware'),
+    (1, 'Target', 1, 'Nintendo Switch with Gray Joy-Con', 299.99, '2017-03-03', 'Hardware'),
+    (1, 'Target', 1,  'Nintendo Switch Lite - Turquoise', 199.99, '2019-09-20', 'Hardware'),
+    (1, 'Target', 1, 'Nintendo Switch Lite - Gray', 199.99, '2019-09-20', 'Hardware'),
+    (1, 'Target', 1, 'Nintendo Switch Lite - Yellow', 199.99, '2019-09-20', 'Hardware'),
+    (1, 'Target', 1, 'Nintendo Switch Lite - Coral', 199.99, '2019-09-20', 'Hardware'),
+    (1, 'Target', 2,'The Legend of Zelda: Breath of the Wild', 29.99, '2018-05-09', 'Software'),
+    (1, 'Walmart', 2, 'Super Mario Odyssey', 29.9, '2018-10-20', 'Software'),
+    (1, 'Target', 2, 'Nintendo Switch with Neon Blue and Neon Red Joy-Con', 299.99, '2017-03-03', 'Hardware'),
+    (1, 'Target', 2, 'Animal Crossing: New Horizons', 39.9, '2020-05-21', 'Software'),
+    (1, 'Walmart', 2, 'Animal Crossing: New Horizons', 35.9, '2020-05-21', 'Software'),
+    (1, 'Gamestop', 2, 'Animal Crossing: New Horizons', 39.9, '2020-05-21', 'Software'),
+    (1, 'Walmart', 1,'The Legend of Zelda: Breath of the Wild', 39.99, '2018-05-09', 'Software'),
+    (1, 'Gamestop', 1,'The Legend of Zelda: Breath of the Wild', 25.99, '2018-05-09', 'Software'),
+    (1, 'Target', 1,'Super Mario Odyssey', 19.99, '2018-05-09', 'Software'),
+    (1, 'Gamestop', 1,'Super Mario Odyssey', 24.99, '2018-05-09', 'Software'),
+    (1, 'Walmart', 2, 'Nintendo Switch with Neon Blue and Neon Red Joy-Con', 299.99, '2017-03-03', 'Hardware'),
+    (1, 'Gamestop', 1, 'Nintendo Switch with Neon Blue and Neon Red Joy-Con', 250, '2017-03-03', 'Hardware'),
+    (1, 'Gamestop', 1,  'Nintendo Switch Lite - Turquoise', 199.99, '2019-09-20', 'Hardware'),
+    (1, 'Walmart', 1,  'Nintendo Switch Lite - Turquoise', 159.99, '2019-09-20', 'Hardware');
+
+
+   
+
+
 
 
 -- Hardware/software should be added dynamically when new items are added to the products table
@@ -88,6 +112,7 @@ VALUES
     ('Super Mario Odyssey', 49.9, '2018-10-20'),
     ('The Legend of Zelda: Breath of the Wild', 39.99, '2018-05-09');
 
+DELETE FROM inStock;
 
 INSERT INTO
     inStock(
@@ -100,7 +125,13 @@ INSERT INTO
 VALUES
     ('The Legend of Zelda: Breath of the Wild', 'Target', 1, 1, 0),
     ('Super Mario Odyssey', 'Walmart', 2, 1, 5),
-    ('Animal Crossing: New Horizons', 'Target', 2, 2, 10);
+    ('Animal Crossing: New Horizons', 'Target', 2, 2, 10),
+    ('Nintendo Switch with Neon Blue and Neon Red Joy-Con', 'Target', 1, 1, 8),
+    ('Nintendo Switch with Gray Joy-Con	', 'Target', 1, 1, 8),
+    ('Nintendo Switch Lite - Turquoise	', 'Target', 1, 1, 8),
+    ('Nintendo Switch Lite - Gray	', 'Target', 1, 1, 5),
+    ('Nintendo Switch Lite - Yellow	', 'Target', 1, 1, 10),
+    ('Nintendo Switch Lite - Coral	', 'Target', 1, 1, 3);
 
 INSERT INTO
     shipmentETA(
@@ -153,13 +184,30 @@ VALUES
     ('Super Mario Odyssey', 'Walmart', 49.99, 30.00, 40.01),
     ('Animal Crossing: New Horizons', 'Target', 49.99, 60.00, -17.02);
 
+DROP VIEW prodUpdates;
 
 CREATE VIEW prodUpdates(store, storeNum, product, price,  prod_amount, restock_time) AS
     SELECT Store.s_storeName, Store.s_storeNum,  p_prodName, p_price, is_prodAmount, time_added
     FROM shipmentETA, Store, products, inStock
-    WHERE sE_prodName = p_prodName AND
-        is_storeName = sE_storeName AND
-        is_storeNum = sE_storeNum
+    WHERE
+        products.p_prodName = is_prodName AND
+        is_storeName = Store.s_storeName AND
+        is_storeNum = Store.s_storeNum;
+
+DROP VIEW cheapPrices;
+
+CREATE VIEW cheapPrices(city, product, store, storeNum, price) AS
+    SELECT
+        locations.l_cityName, p_prodName, p_storeName, p_storeNum, p_price
+    FROM products, locations
+
+SELECT
+    p_storeName, p_prodName, MIN(p_price)
+FROM products
+WHERE p_prodName = 'Animal Crossing: New Horizons'	AND
+p_storeName = 'Target'
+    
+
 
 
 --need a trigger for increasing 'instock' and 'contains' table / other relevant tables
