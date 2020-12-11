@@ -1,26 +1,11 @@
 import React, { Component, Fragment} from 'react';
 import {Link} from "react-router-dom";
-
 import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Table from 'react-bootstrap/Table';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
-
-//import moment from 'moment';
-
-//var curr_time = moment().utcOffset('0').format('YYYY-MM-DD'); //may use this for situations where we sort by most recent 
-
-
-//set form of pulled data [complete when queries are finished]
-// const itemDetails = ({item}) => (
-//     <tr>
-//         <td>{item.s_prodName}</td>
-//         <td>{item.s_price}</td>
-//         <td>{item.s_releasedate}</td>
-//     </tr>
-// )
 
 
 
@@ -29,6 +14,7 @@ class Software extends Component {
     constructor(props){
         super(props)
         this.state = {
+            type : 'software',
             list : []
         }
     }
@@ -45,17 +31,7 @@ class Software extends Component {
     }
 
 
-    //set pulled data to the form of the list
-    // S_List = () => {
-    //     return this.state.list.map((item, index) => {
-    //             return <itemDetails list = {item} key = {index} />
-    //     })
-    // }
-
-
-    //pull data from the DB
-    // getSoftware(){
-
+    
 
     render() {
         //console.log(this.state);
@@ -82,17 +58,18 @@ class Software extends Component {
                             <td>Release Date</td>
                         </thead>
                         <tbody>
-
                             {list.map((item, index) => {
                                 return <tr>
-                                        <Link to = {{pathname: `/product`, state : {
-                                            }}}>
+                                            <Link to = {{
+                                                pathname: `/product`,
+                                                state:{
+                                                    prodName: item.s_prodName                                                }
+                                            }}>
                                             <td>{item.s_prodName}</td></Link>
                                             <td>{item.s_price}</td>
                                             <td>{item.s_releasedate}</td>
                                         </tr>
                             })}
-
                         </tbody>
                     </Table>
                 </Container>
