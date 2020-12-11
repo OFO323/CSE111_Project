@@ -19,8 +19,12 @@ CREATE TABLE Store(
     s_storeNum INTEGER NOT NULL
     );
 
+DROP TABLE products;
+
 CREATE TABLE products(
+    p_cityNum INTEGER NOT NULL,
     p_storeName CHAR NOT NULL,
+    p_storeNum INTEGER NOT NULL,
     p_prodName CHAR NOT NULL,
     p_price DECIMAL NOT NULL,
     p_releasedate DATE NOT NULL,
