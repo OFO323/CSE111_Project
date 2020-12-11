@@ -1,8 +1,6 @@
 import React, { Component, Fragment} from 'react';
 import {Link} from "react-router-dom";
-
 //import axios from 'axios';
-
 //import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,20 +10,7 @@ import Table from 'react-bootstrap/Table';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 
-
 //import moment from 'moment';
-
-// Set form of pulled data (Complete when queries are ready)
-// const itemlist = item => (
-    // <tr>
-    //     <td>item.list.</td>
-    //     <td>item.list.</td>
-    //     <td>item.list.</td>
-    //     <td>item.list.</td>
-    // </tr>
-// )
-
-
 
 
 class Hardware extends Component {
@@ -35,12 +20,10 @@ class Hardware extends Component {
         this.state = {
             isLoaded: false,
             list: []
-
         }
     }
 
     //when componenet is successfully called pull appropriate data
-
     async componentDidMount(){
         // this.getHardware();
 
@@ -56,7 +39,6 @@ class Hardware extends Component {
 
 
 
-
     render() {
 
         const {list} = this.state;
@@ -65,7 +47,7 @@ class Hardware extends Component {
             <Fragment>
                 <Link to="/">
                     <Navbar bg="dark" variant="dark">
-                        <Navbar.Brand href="#home">Nintendo Tingz</Navbar.Brand>
+                        <Navbar.Brand href="#home">Ninventory</Navbar.Brand>
                     </Navbar>
                 </Link>
                 <Jumbotron>
@@ -84,17 +66,17 @@ class Hardware extends Component {
                         </thead>
                         <tbody>
                             {/* this is where data will be pulled and displayed */}
-
                             {list.map((item, index) => {
                                 return  <tr>
-                                            <Link to = {{pathname: `/product`, state : {
+                                            <Link to = {{pathname: `/product`, 
+                                            state:{
+                                                prodName: item.h_name
                                             }}}>
                                             <td>{item.h_name}</td></Link>
                                             <td>{item.h_price}</td>
                                             <td>{item.h_releaseDate}</td>
                                         </tr>
                             })}
-
                         </tbody>
                     </Table>
                 </Container>
