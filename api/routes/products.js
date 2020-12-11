@@ -41,7 +41,7 @@ router.get('/:name', (req, res) => {
     const pName = req.params.name;
     //const prodName  = req.params.p_prodName
     knex
-        .select('p_prodName')        // Retrieve all items
+        .select('*')        // Retrieve all items
         .from('products')   // Retreive from products table
         .where('p_prodName', 'like', `%${pName}%`)
         .then(userData => {
