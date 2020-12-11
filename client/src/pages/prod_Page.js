@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 
+import StoreTable from './storeTables';
 
 
 
@@ -20,18 +21,23 @@ class ProdPage extends Component{
     constructor(props){
         super(props)
         this.state = {
-            prodName : this.props.prod_Name , // replace with  //name is used as a key to pull specific data for this particular product page
+            prodName : this.props.location.state, //name is used as a key to pull specific data for this particular product page
             prodBaseDetails : [],    //will hold all the pulled data used to display
             prodStoreDetails : []
-        }
+        };
     }
 
     async componentDidMount(){
-        const url = `http://localhost:5000/routes/products/${this.state.prod_Name}`;
+        const {prodName} = this.props.location.state;
+
+
+
+        const url = `http://localhost:5000/routes/products/base/${prodName}`;
         const response = await fetch(url);
         const data = await response.json();
+        //console.log(data);
         this.setState({prodBaseDetails : data});
-        console.log(this.state);
+        //console.log(this.state.prodBaseDetails); 
     }
 
     basePriceComp(){
@@ -42,23 +48,41 @@ class ProdPage extends Component{
 
 
     render(){
-
+        const {prodName} = this.props.location.state;
         const {prodBaseDetails} = this.state;
+        //console.log(prodBaseDetails);
+
         return(
         <Fragment>
             <Link to="/">
                     <Navbar bg="dark" variant="dark">
-                        <Navbar.Brand href="#home">Nintendo Tingz</Navbar.Brand>
+                        <Navbar.Brand href="#home">Ninventory</Navbar.Brand>
                     </Navbar>
                 </Link>
                 <Jumbotron>
-                    <h1>{prodBaseDetails.p_prodName}</h1>   {/* replace w/ this.state.prodName once connection successful */}
+                    <h1>{prodName}</h1>   {/* replace w/ this.state.prodName once connection successful */}
                     <p>
                         Lowest prices and general product info for a specific product
                     </p>
                 </Jumbotron>
                 <Container fluid>
                     {/* will contain the base product info */}
+                    <Table style = {{color:"#f72525"}} striped hover >
+                        <thead>
+                            <td>Base Nintendo Store Price</td>
+                            <td>Release Date</td>
+                        </thead>
+                        <tbody>
+                           
+                            {prodBaseDetails.map((item, index) => {
+                                return <tr>
+                                            <td>{item.max}</td>
+                                            <td>{item.p_releasedate}</td>
+                                        </tr>
+                            })}
+                       
+                        </tbody>
+                    </Table>
                     <Row>
                         <Col>
                             <h1>{prodBaseDetails.p_prodName}</h1>
@@ -72,11 +96,17 @@ class ProdPage extends Component{
                     </Row>
 
                 </Container>
-                <Container fluid>
+                <Container fluid >
                     {/*container for every store will info such as price/ basePrice comparison /last shipment*/}
-                    <Row>
-                            <h1>Games</h1>
-                    </Row>
+                    <StoreTable store = 'Target' product = {prodName}/>
+                </Container>
+                <Container fluid >
+                    {/*container for every store will info such as price/ basePrice comparison /last shipment*/}
+                    <StoreTable store = 'Walmart' product = {prodName}/>
+                </Container>
+                <Container fluid >
+                    {/*container for every store will info such as price/ basePrice comparison /last shipment*/}
+                    <StoreTable store = 'Gamestop' product = {prodName}/>
                 </Container>
         </Fragment>
         )
