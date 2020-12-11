@@ -9,6 +9,8 @@ import Home from './pages/home';
 import Software from './pages/s_Page';
 import Hardware from './pages/h_Page';
 import ProdPage from './pages/prod_Page';
+import Updates  from './pages/updatesTable';
+import StoreTable from './pages/storeTables';
 
 
 
@@ -20,17 +22,17 @@ constructor(props) {
   this.state = { apiResponse: "" };
 }
 
-callAPI() {
-  //test calls with function below 
-    fetch("http://localhost:5000/routes/products/Super Mario Odyssey")
-        //give text response of data
-        .then(res => res.text())
-        .then(res => this.setState({ apiResponse: res }));
-}
+// callAPI() {
+//   //test calls with function below 
+//     fetch("http://localhost:5000/routes/products/Super Mario Odyssey")
+//         //give text response of data
+//         .then(res => res.text())
+//         .then(res => this.setState({ apiResponse: res }));
+// }
 
-componentWillMount() {
-    this.callAPI();
-}
+// componentWillMount() {
+//     this.callAPI();
+// }
 
 // Put Front End Stuff here
 // Run "npm start" in client to test
@@ -44,6 +46,8 @@ render(){
                 <Route path = '/software' component = {Software} />
                 <Route path = '/hardware' component = {Hardware} />
                 <Route path = '/product' component = {ProdPage} />
+                <Route path = '/updates' component = {Updates} />
+                <Route path = '/storeTable' component = {StoreTable} />
             </Switch>
         </div>
 
