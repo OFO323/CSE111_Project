@@ -11,15 +11,21 @@ import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
+import Image from 'react-bootstrap/Image';
 
-class Home extends React.Component {
+import img1 from './nin_console.png';
+import img2 from './nin_games.jpg';
+
+import Updates from './updatesTable';
+
+class Home extends Component {
 
 
     render(){
         return (
             <body>
                 <Navbar bg="dark" variant="dark">
-                    <Navbar.Brand href="#home">Nintendo Tingz</Navbar.Brand>
+                    <Navbar.Brand href="#home">Ninventory</Navbar.Brand>
                 </Navbar>
                 <Jumbotron>
                     <h1>Home</h1>
@@ -30,7 +36,7 @@ class Home extends React.Component {
 
                 <CardColumns>
                     <Card style={{ width: "18rem" }}>
-                        <Card.Img variant="top" src = "holder.js/171x180" />
+                        <Image src={img1} style = {{width:"18rem"}}/>
                         <Card.Body>
                             <Link to="/hardware">
                                 <Button variant="danger">Hardware</Button>
@@ -40,7 +46,7 @@ class Home extends React.Component {
             
             
                     <Card style={{width: '18rem'}}>
-                        <Card.Img variant="top" src = "holder.js/171x180" />
+                        <Image src = {img2} style = {{width:"18rem", height: "9rem"}}  />
                         <Card.Body>
                             <Link to="/software">
                                 <Button variant="danger">Software</Button>
@@ -48,6 +54,11 @@ class Home extends React.Component {
                         </Card.Body>
                     </Card>
                 </CardColumns>
+
+
+                <Container>
+                    <Updates />
+                </Container>
             </body>
         )
     }
